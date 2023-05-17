@@ -1,36 +1,122 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
+const { check, validationResult } = require('express-validator');
+
+const User = require('../models/User');
+const Document = require('../models/Document');
 
 // @route  GET api/documents
 // @desc   Get all users documents
 // @access Private
 
-router.get('/', (req, res) => {
-  res.send('Get all documents');
+router.get('/', auth, async (req, res) => {
+  try {
+    const documents = await Document.find({ user: req.user.id }).sort({
+      date: -1,
+    });
+    res.json(documents);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
 });
 
-// @route  POST api/documents
+// @route  POST api/documents/
 // @desc   Add new document
 // @access Private
 
-router.post('/', (req, res) => {
-  res.send('Add document');
-});
+router.post(
+  '/',
+  [
+    auth,
+    [
+      check('title', 'Title is required').notEmpty(),
+      check('content', 'Content is required').notEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { title, content, type } = req.body;
+
+    try {
+      const newDocument = new Document({
+        title,
+        content,
+        type,
+        user: req.user.id,
+        department: req.user.department,
+      });
+
+      const document = await newDocument.save();
+      res.json(document);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
 
 // @route  PUT api/documents/:id
 // @desc   Update document
 // @access Private
 
-router.put('/:id', (req, res) => {
-  res.send('Update document');
+router.put('/:id', auth, async (req, res) => {
+  const { title, content, type } = req.body;
+
+  // Build contact object
+  const documentFields = {};
+  if (title) documentFields.title = title;
+  if (content) documentFields.content = content;
+  if (type) documentFields.type = type;
+
+  try {
+    let document = await Document.findById(req.params.id);
+    if (!document) return res.status(404).json({ msg: 'Document not found' });
+
+    // Make sure user owns contact
+    if (document.department !== req.user.department) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
+
+    document = await Document.findByIdAndUpdate(
+      req.params.id,
+      { $set: documentFields },
+      { new: true }
+    );
+
+    res.json(document);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
 });
 
 // @route  DELETE api/documents/:id
 // @desc   Delete document
 // @access Private
 
-router.put('/:id', (req, res) => {
-  res.send('Delete document');
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    let document = await Document.findById(req.params.id);
+    if (!document) return res.status(404).json({ msg: 'Document not found' });
+
+    // Make sure user owns contact
+    if (document.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
+
+    await Document.findByIdAndRemove(req.params.id);
+
+    res.json({ msg: 'Document removed' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
 });
 
 module.exports = router;
