@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import DocumentContext from './documentContext';
 import documentReducer from './documentReducer';
 import {
@@ -20,6 +20,7 @@ const DocumentState = props => {
     documents: [
       {
         id: 1,
+        userName: 'Brian Lin',
         title: 'Jennie is beautiful',
         content:
           'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis veritatis iusto dolore omnis ratione minima eveniet optio voluptatem, illum repellat consequuntur doloremque nesciunt quas, aliquid cumque a velit id ipsa?',
@@ -28,6 +29,7 @@ const DocumentState = props => {
       },
       {
         id: 2,
+        userName: 'Brian Lin',
         title: 'IU is beautiful',
         content:
           'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis veritatis iusto dolore omnis ratione minima eveniet optio voluptatem, illum repellat consequuntur doloremque nesciunt quas, aliquid cumque a velit id ipsa?',
@@ -36,6 +38,7 @@ const DocumentState = props => {
       },
       {
         id: 3,
+        userName: 'Brian Lin',
         title: 'Jisoo is beautiful',
         content:
           'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis veritatis iusto dolore omnis ratione minima eveniet optio voluptatem, illum repellat consequuntur doloremque nesciunt quas, aliquid cumque a velit id ipsa?',
@@ -45,9 +48,13 @@ const DocumentState = props => {
     ],
   };
 
-  const [state, didpatch] = useReducer(documentReducer, initialState);
+  const [state, dispatch] = useReducer(documentReducer, initialState);
 
   // Add Document
+  const addDocument = document => {
+    document.id = uuidv4();
+    dispatch({ type: ADD_DOCUMENT, payload: document });
+  };
 
   // Delete Document
 
@@ -62,7 +69,9 @@ const DocumentState = props => {
   // Clear Filter
 
   return (
-    <DocumentContext.Provider value={{ documents: state.documents }}>
+    <DocumentContext.Provider
+      value={{ documents: state.documents, addDocument }}
+    >
       {props.children}
     </DocumentContext.Provider>
   );

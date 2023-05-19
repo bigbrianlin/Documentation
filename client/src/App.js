@@ -4,6 +4,7 @@ import Navbar from './components/layout/Navbar';
 import Shared from './components/pages/Shared';
 import Department from './components/pages/Department';
 import User from './components/pages/User';
+import New from './components/pages/New';
 
 import DocumentState from './context/document/DocumentState';
 import 'materialize-css/dist/css/materialize.min.css';
@@ -26,7 +27,7 @@ const App = () => {
               <Route path='/' element={<Shared />} />
               <Route path='/department' element={<Department />} />
               <Route path='/user' element={<User />} />
-              <Route path='/' element={<Shared />} />
+              <Route path='/new' element={<New />} />
             </Routes>
           </div>
         </Fragment>
