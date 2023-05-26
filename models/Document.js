@@ -21,6 +21,10 @@ const DocumentSchema = mongoose.Schema({
     type: String,
     default: 'private',
   },
+  userName: {
+    type: mongoose.Schema.Types.String,
+    ref: 'users',
+  },
   date: {
     type: Date,
     default: Date.now,

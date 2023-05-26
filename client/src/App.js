@@ -1,38 +1,51 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Shared from './components/pages/Shared';
 import Department from './components/pages/Department';
 import User from './components/pages/User';
 import New from './components/pages/New';
+import Document from './components/pages/Document';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import Alerts from './components/layout/Alerts';
+import PrivateRoute from './components/routing/PrivateRoute';
 
 import DocumentState from './context/document/DocumentState';
-import 'materialize-css/dist/css/materialize.min.css';
-import M from 'materialize-css/dist/js/materialize.min.js';
+import AuthState from './context/auth/AuthState';
+import AlertState from './context/alert/AlertState';
+import setAuthToken from './utils/setAuthToken';
 import './App.css';
 
-const App = () => {
-  useEffect(() => {
-    // Init Materialize JS
-    M.AutoInit();
-  });
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
+const App = () => {
   return (
-    <DocumentState>
-      <Router>
-        <Fragment>
-          <Navbar />
-          <div className='container'>
-            <Routes>
-              <Route path='/' element={<Shared />} />
-              <Route path='/department' element={<Department />} />
-              <Route path='/user' element={<User />} />
-              <Route path='/new' element={<New />} />
-            </Routes>
-          </div>
-        </Fragment>
-      </Router>
-    </DocumentState>
+    <AuthState>
+      <DocumentState>
+        <AlertState>
+          <Router>
+            <Fragment>
+              <Navbar />
+              <div className='container'>
+                <Alerts />
+                <Routes>
+                  <Route path='/' element={<Shared />} />
+                  <Route path='department' element={<Department />} />
+                  <Route path='user' element={<User />} />
+                  <Route path='document/:id' element={<Document />} />
+                  <Route path='new' element={<New />} />
+                  <Route path='register' element={<Register />} />
+                  <Route path='login' element={<Login />} />
+                </Routes>
+              </div>
+            </Fragment>
+          </Router>
+        </AlertState>
+      </DocumentState>
+    </AuthState>
   );
 };
 

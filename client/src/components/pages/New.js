@@ -1,12 +1,27 @@
-import React, { useState } from 'react';
-import DocumentContext from '../../context/document/documentContext';
+import React, { useEffect, useState } from 'react';
+import {
+  addDocument,
+  useDocuments,
+  clearCurrent,
+} from '../../context/document/DocumentState';
+
+const initialDocument = {
+  title: '',
+  content: '',
+  type: 'private',
+};
 
 const New = () => {
-  const [document, setDocument] = useState({
-    title: '',
-    content: '',
-    type: 'private',
-  });
+  const [documentState, documentDispatch] = useDocuments();
+  const { current } = documentState;
+  const [document, setDocument] = useState(initialDocument);
+  useEffect(() => {
+    if (current !== null) {
+      setDocument(current);
+    } else {
+      setDocument(initialDocument);
+    }
+  }, [current]);
 
   const { title, content, type } = document;
 
@@ -15,39 +30,41 @@ const New = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-    DocumentContext.addDocument(document);
-    setDocument({
-      title: '',
-      content: '',
-      type: 'private',
-    });
+    addDocument(documentDispatch, document).then(() =>
+      setDocument(initialDocument)
+    );
+    clearAll();
+  };
+
+  const clearAll = () => {
+    clearCurrent(documentDispatch);
   };
 
   return (
     <form onSubmit={onSubmit}>
-      <h2>Add Document</h2>
+      <h2 className='text-primary'>Add Document</h2>
       <input
         type='text'
-        placeholder='title'
+        placeholder='Title'
         name='title'
         value={title}
         onChange={onChange}
       />
       <input
         type='text'
-        placeholder='content'
+        placeholder='Content'
         name='content'
         value={content}
         onChange={onChange}
       />
-      <h5>Type</h5>
+      <h5>Document Type</h5>
       <input
         type='radio'
         name='type'
         value='private'
         checked={type === 'private'}
         onChange={onChange}
-      />
+      />{' '}
       Private{' '}
       <input
         type='radio'
@@ -55,18 +72,22 @@ const New = () => {
         value='shared'
         checked={type === 'shared'}
         onChange={onChange}
-      />
+      />{' '}
       Shared
       <div>
-        <button
-          className='btn waves-effect waves-light'
+        <input
           type='submit'
-          value='Add Document'
-        >
-          Submit
-          <i class='material-icons right'>send</i>
-        </button>
+          value={'Add Document'}
+          className='btn btn-primary btn-block'
+        />
       </div>
+      {current && (
+        <div>
+          <button className='btn btn-light btn-block' onClick={clearAll}>
+            Clear
+          </button>
+        </div>
+      )}
     </form>
   );
 };

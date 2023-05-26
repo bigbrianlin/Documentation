@@ -17,6 +17,9 @@ app.get('/', (req, res) =>
 app.use('/api/users', require('./routes/users'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/documents', require('./routes/documents'));
+app.use('/api/shared', require('./routes/shared'));
+app.use('/api/department', require('./routes/department'));
+app.use('/api/history', require('./routes/history'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

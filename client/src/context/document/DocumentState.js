@@ -1,7 +1,7 @@
-import React, { useReducer } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useReducer, useContext } from 'react';
 import DocumentContext from './documentContext';
 import documentReducer from './documentReducer';
+import axios from 'axios';
 import {
   GET_DOCUMENTS,
   ADD_DOCUMENT,
@@ -15,63 +15,116 @@ import {
   DOCUMENT_ERROR,
 } from '../types';
 
+export const useDocuments = () => {
+  const { state, dispatch } = useContext(DocumentContext);
+  return [state, dispatch];
+};
+
+// Get Documents
+export const getDocuments = async dispatch => {
+  try {
+    const res = await axios.get('/api/documents');
+
+    dispatch({
+      type: GET_DOCUMENTS,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: DOCUMENT_ERROR,
+      payload: err.response.msg,
+    });
+  }
+};
+
+// Add Document
+export const addDocument = async (dispatch, document) => {
+  try {
+    const res = await axios.post('/api/documents', document);
+
+    dispatch({
+      type: ADD_DOCUMENT,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: DOCUMENT_ERROR,
+      payload: err.response.msg,
+    });
+  }
+};
+
+// Delete Document
+export const deleteDocument = async (dispatch, id) => {
+  try {
+    await axios.delete(`/api/documents/${id}`);
+
+    dispatch({
+      type: DELETE_DOCUMENT,
+      payload: id,
+    });
+  } catch (err) {
+    dispatch({
+      type: DOCUMENT_ERROR,
+      payload: err.response.msg,
+    });
+  }
+};
+
+// Set Current Document
+export const setCurrent = (dispatch, document) => {
+  dispatch({ type: SET_CURRENT, payload: document });
+};
+
+// Clear Current Document
+export const clearCurrent = dispatch => {
+  dispatch({ type: CLEAR_CURRENT });
+};
+
+// Update Document
+export const updateDocument = async (dispatch, document) => {
+  try {
+    const res = await axios.put(`/api/documents/${document._id}`, document);
+
+    dispatch({
+      type: UPDATE_DOCUMENT,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: DOCUMENT_ERROR,
+      payload: err.response.msg,
+    });
+  }
+};
+
+// Clear Documents
+export const clearDocuments = dispatch => {
+  dispatch({ type: CLEAR_DOCUMENTS });
+};
+
+// Filter Documents
+export const filterDocuments = (dispatch, text) => {
+  dispatch({ type: FILTER_DOCUMENTS, payload: text });
+};
+
+// Clear Filter
+export const clearFilter = dispatch => {
+  dispatch({ type: CLEAR_FILTER });
+};
+
 const DocumentState = props => {
   const initialState = {
-    documents: [
-      {
-        id: 1,
-        userName: 'Brian Lin',
-        title: 'Jennie is beautiful',
-        content:
-          'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis veritatis iusto dolore omnis ratione minima eveniet optio voluptatem, illum repellat consequuntur doloremque nesciunt quas, aliquid cumque a velit id ipsa?',
-        department: 'DepartmentA',
-        type: 'shared',
-      },
-      {
-        id: 2,
-        userName: 'Brian Lin',
-        title: 'IU is beautiful',
-        content:
-          'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis veritatis iusto dolore omnis ratione minima eveniet optio voluptatem, illum repellat consequuntur doloremque nesciunt quas, aliquid cumque a velit id ipsa?',
-        department: 'DepartmentB',
-        type: 'private',
-      },
-      {
-        id: 3,
-        userName: 'Brian Lin',
-        title: 'Jisoo is beautiful',
-        content:
-          'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reiciendis veritatis iusto dolore omnis ratione minima eveniet optio voluptatem, illum repellat consequuntur doloremque nesciunt quas, aliquid cumque a velit id ipsa?',
-        department: 'DepartmentC',
-        type: 'shared',
-      },
-    ],
+    documents: null,
+    current: null,
+    filtered: null,
+    error: null,
   };
 
   const [state, dispatch] = useReducer(documentReducer, initialState);
 
-  // Add Document
-  const addDocument = document => {
-    document.id = uuidv4();
-    dispatch({ type: ADD_DOCUMENT, payload: document });
-  };
-
-  // Delete Document
-
-  // Set Current Document
-
-  // Clear Current Document
-
-  // Update Document
-
-  // Filter Documents
-
-  // Clear Filter
-
   return (
-    <DocumentContext.Provider
-      value={{ documents: state.documents, addDocument }}
-    >
+    <DocumentContext.Provider value={{ state: state, dispatch }}>
       {props.children}
     </DocumentContext.Provider>
   );

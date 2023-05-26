@@ -4,12 +4,12 @@ const DocumentItem = ({ document }) => {
   const { id, title, content, department, type, userName } = document;
 
   return (
-    <ul class='collection with-header'>
-      <li class='collection-item'>
+    <ul className='collection with-header'>
+      <li className='collection-item'>
         <div>
           {title} {department} {userName}
-          <a href='' class='secondary-content'>
-            <i class='material-icons'>send</i>
+          <a href='' className='secondary-content'>
+            <i className='material-icons'>send</i>
           </a>
         </div>
       </li>

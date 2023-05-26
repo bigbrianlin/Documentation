@@ -22,6 +22,19 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+// @route  GET api/documents/:id
+// @desc   Get the document
+// @access Private
+router.get('/:id', async (req, res) => {
+  let document = await Document.findById(req.params.id);
+  if (!document) return res.status(404).json({ msg: 'Document not found' });
+  res.json({
+    title: document.title,
+    content: document.content,
+    department: document.department,
+  });
+});
+
 // @route  POST api/documents/
 // @desc   Add new document
 // @access Private
@@ -50,6 +63,7 @@ router.post(
         type,
         user: req.user.id,
         department: req.user.department,
+        userName: req.user.name,
       });
 
       const document = await newDocument.save();

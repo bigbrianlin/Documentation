@@ -15,7 +15,7 @@ router.post(
   '/',
   [
     check('name', 'Please add name').notEmpty(),
-    check('account', 'Please include a valid account').notEmpty(),
+    check('email', 'Please include a valid email').isEmail(),
     check(
       'password',
       'Please enter a password with 6 or more characters'
@@ -28,9 +28,9 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, account, password, department } = req.body;
+    const { name, email, password, department } = req.body;
     try {
-      let user = await User.findOne({ account: account });
+      let user = await User.findOne({ email: email });
 
       if (user) {
         return res.status(400).json({ msg: 'User already exists' });
@@ -38,7 +38,7 @@ router.post(
 
       user = new User({
         name,
-        account,
+        email,
         password,
         department,
       });
@@ -50,6 +50,7 @@ router.post(
       const payload = {
         user: {
           id: user.id,
+          name: user.name,
           department: user.department,
         },
       };
