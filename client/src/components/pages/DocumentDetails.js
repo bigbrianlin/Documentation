@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../../context/auth/AuthState';
 
 const DocumentDetail = props => {
   const { id } = useParams();
@@ -20,7 +21,28 @@ const DocumentDetail = props => {
     fetchDocument();
   }, [id]);
 
-  if (!document) {
+  // Get userID
+  const [userProfile, setUserProfile] = useState(null);
+  const [state] = useAuth();
+  const userID = state.user && state.user._id;
+  const isAuthenticated = state.isAuthenticated;
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        if (userID) {
+          const response = await axios.get(`/api/users/${userID}`);
+          setUserProfile(response.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [userID]);
+
+  if (!document || !userProfile) {
     return <div>Loading...</div>;
   }
 
@@ -39,27 +61,38 @@ const DocumentDetail = props => {
       });
   };
 
-  // const user = props.value.state.user;
-  // const isOwner = user && document.user === user._id;
-  // const isShared = document.type === 'shared';
-  // const isDepartment = user && document.department === user.department;
+  const isOwner = () => {
+    if (userProfile.user && document.user === userProfile.user._id) {
+      return true;
+    }
+    return false;
+  };
+
+  const isDepartment = () => {
+    if (
+      userProfile.user &&
+      document.department === userProfile.user.department
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   return (
     <div>
-      <h2>{document?.title}</h2>
-      <p>{document?.content}</p>
-      <p>{document?.department}</p>
-      <button onClick={handleEdit}>Edit</button>
-      <button onClick={handleDelete}>Delete</button>
+      <h2>{document.title}</h2>
+      <p>{document.content}</p>
+      <p>{document.department}</p>
+      <p> {document.userName} </p>
 
-      {/* {isOwner && (
+      {isAuthenticated && isOwner() ? (
         <>
           <button onClick={handleEdit}>Edit</button>
           <button onClick={handleDelete}>Delete</button>{' '}
         </>
-      )}
-
-      {!isOwner && isDepartment && <button onClick={handleEdit}>Edit</button>} */}
+      ) : isAuthenticated && isDepartment() ? (
+        <button onClick={handleEdit}>Edit</button>
+      ) : null}
     </div>
   );
 };

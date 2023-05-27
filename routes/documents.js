@@ -32,6 +32,8 @@ router.get('/:id', async (req, res) => {
     title: document.title,
     content: document.content,
     department: document.department,
+    userName: document.userName,
+    user: document.user,
   });
 });
 

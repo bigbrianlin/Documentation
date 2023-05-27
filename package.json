@@ -21,7 +21,8 @@
     "jsonwebtoken": "^9.0.0",
     "materialize-css": "^1.0.0",
     "mongoose": "^7.1.0",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "semantic-ui-react": "^2.1.4"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",

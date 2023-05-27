@@ -28,7 +28,7 @@ const User = () => {
         {documents.map(document => (
           <li key={document._id}>
             <h2>{document.title}</h2>
-            <p>{document.content}</p>
+            <p>{new Date(document.date).toLocaleDateString()}</p>
             <p>{document.userName}</p>
             <button onClick={() => onClick(document._id)}>view</button>
           </li>
