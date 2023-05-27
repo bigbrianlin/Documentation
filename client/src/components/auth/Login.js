@@ -1,7 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import AlertContext from '../../context/alert/alertContext';
-import { useAuth, clearErrors, login } from '../../context/auth/AuthState';
+import {
+  useAuth,
+  clearErrors,
+  login,
+  loadUser,
+} from '../../context/auth/AuthState';
 
 const Login = () => {
   const alertContext = useContext(AlertContext);
@@ -15,7 +20,8 @@ const Login = () => {
       setAlert(error, 'danger');
       clearErrors(authDispatch);
     }
-  }, [error, isAuthenticated, authDispatch, setAlert]);
+    loadUser(authDispatch);
+  }, [error, authDispatch, setAlert]);
 
   const [user, setUser] = useState({
     email: '',

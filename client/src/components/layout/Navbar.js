@@ -23,6 +23,9 @@ const Navbar = ({ title, icon }) => {
         <Link to='/user'>User</Link>
       </li>
       <li>
+        <Link to='/new'>New</Link>
+      </li>
+      <li>
         <Link onClick={onLogout} to='/login'>
           <i className='fas fa-sign-out-alt' />{' '}
           <span className='hide-sm'>Logout</span>

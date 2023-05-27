@@ -21,10 +21,6 @@ export const useAuth = () => {
   return [state, dispatch];
 };
 
-// Action creators
-// NOTE: These could be moved to a separate file like in redux
-// but they remain here for ease of students transitioning
-
 // Load User
 export const loadUser = async dispatch => {
   try {
@@ -43,7 +39,7 @@ export const loadUser = async dispatch => {
 export const register = async (dispatch, formData) => {
   try {
     const res = await axios.post('/api/users', formData);
-
+    setAuthToken(res.data.token);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data,
@@ -62,7 +58,7 @@ export const register = async (dispatch, formData) => {
 export const login = async (dispatch, formData) => {
   try {
     const res = await axios.post('/api/auth', formData);
-
+    setAuthToken(res.data.token);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,

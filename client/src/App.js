@@ -4,18 +4,18 @@ import Navbar from './components/layout/Navbar';
 import Shared from './components/pages/Shared';
 import Department from './components/pages/Department';
 import User from './components/pages/User';
-import New from './components/pages/New';
-import Document from './components/pages/Document';
+import NewDocument from './components/pages/NewDocument';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Alerts from './components/layout/Alerts';
-import PrivateRoute from './components/routing/PrivateRoute';
 
-import DocumentState from './context/document/DocumentState';
 import AuthState from './context/auth/AuthState';
+import DocumentState from './context/document/DocumentState';
 import AlertState from './context/alert/AlertState';
 import setAuthToken from './utils/setAuthToken';
 import './App.css';
+import DocumentDetails from './components/pages/DocumentDetails';
+import EditDocument from './components/pages/EditDocument';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -35,8 +35,9 @@ const App = () => {
                   <Route path='/' element={<Shared />} />
                   <Route path='department' element={<Department />} />
                   <Route path='user' element={<User />} />
-                  <Route path='document/:id' element={<Document />} />
-                  <Route path='new' element={<New />} />
+                  <Route path='document/:id' element={<DocumentDetails />} />
+                  <Route path='new' element={<NewDocument />} />
+                  <Route path='document/:id/edit' element={<EditDocument />} />
                   <Route path='register' element={<Register />} />
                   <Route path='login' element={<Login />} />
                 </Routes>

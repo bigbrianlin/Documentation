@@ -1,8 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Department = () => {
+  const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
+
+  const onClick = documentId => {
+    navigate(`/document/${documentId}`);
+  };
+
   useEffect(() => {
     axios
       .get('/api/department')
@@ -22,6 +29,7 @@ const Department = () => {
             <h2>{document.title}</h2>
             <p>{document.content}</p>
             <p>{document.userName}</p>
+            <button onClick={() => onClick(document._id)}>view</button>
           </li>
         ))}
       </ul>

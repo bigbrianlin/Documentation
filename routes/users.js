@@ -30,7 +30,7 @@ router.post(
 
     const { name, email, password, department } = req.body;
     try {
-      let user = await User.findOne({ email: email });
+      let user = await User.findOne({ email });
 
       if (user) {
         return res.status(400).json({ msg: 'User already exists' });
@@ -50,8 +50,8 @@ router.post(
       const payload = {
         user: {
           id: user.id,
-          name: user.name,
           department: user.department,
+          name: user.name,
         },
       };
 

@@ -1,13 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import AlertContext from '../../context/alert/alertContext';
-import { useAuth, clearErrors, register } from '../../context/auth/AuthState';
+import {
+  useAuth,
+  clearErrors,
+  register,
+  loadUser,
+} from '../../context/auth/AuthState';
 
-const Register = props => {
+const Register = () => {
   const alertContext = useContext(AlertContext);
   const [authState, authDispatch] = useAuth();
-  const { error, isAuthenticated } = authState;
 
+  const { error, isAuthenticated } = authState;
   const { setAlert } = alertContext;
 
   useEffect(() => {
@@ -15,7 +20,8 @@ const Register = props => {
       setAlert(error, 'danger');
       clearErrors(authDispatch);
     }
-  }, [error, isAuthenticated, props.history, setAlert, authDispatch]);
+    loadUser(authDispatch);
+  }, [error, setAlert, authDispatch]);
 
   const [user, setUser] = useState({
     name: '',

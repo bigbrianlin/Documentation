@@ -133,4 +133,30 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
+// @route  GET api/documents/:id/edit
+// @desc   Get the document for editing
+// @access Private
+router.get('/:id/edit', auth, async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+    if (!document) {
+      return res.status(404).json({ msg: 'Document not found' });
+    }
+
+    // Make sure user owns the document
+    if (document.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: 'Not authorized' });
+    }
+
+    res.json({
+      title: document.title,
+      content: document.content,
+      type: document.type,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 module.exports = router;
