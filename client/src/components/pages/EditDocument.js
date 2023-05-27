@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const EditDocument = ({ match }) => {
   const [document, setDocument] = useState({
@@ -8,6 +8,7 @@ const EditDocument = ({ match }) => {
     content: '',
     type: 'private',
   });
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,8 +18,9 @@ const EditDocument = ({ match }) => {
 
   const getDocument = async () => {
     try {
-      const res = await axios.get(`/api/documents/${match.params.id}`);
+      const res = await axios.get(`/api/documents/${id}`);
       setDocument(res.data);
+      console.log(res.data);
     } catch (err) {
       console.error(err.response.data);
     }
@@ -33,8 +35,8 @@ const EditDocument = ({ match }) => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.put(`/api/documents/${match.params.id}`, document);
-      navigate(`/documents/${match.params.id}`);
+      await axios.put(`/api/documents/${id}`, document);
+      navigate(`/document/${id}`);
     } catch (err) {
       console.error(err.response.data);
     }

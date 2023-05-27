@@ -28,7 +28,7 @@ const NewDocument = () => {
         type: 'private',
       });
 
-      navigate(`/documents/${id}`);
+      navigate(`/document/${id}`, { replace: true });
     } catch (err) {
       console.error(err.response.data);
     }

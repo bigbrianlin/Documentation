@@ -73,4 +73,18 @@ router.post(
   }
 );
 
+// @route  GET api/users/:id
+// @desc   Get the user
+// @access Private
+
+// router.get('/:id', auth, async (req, res) => {
+//   let user = await User.findById(req.params.id);
+//   if (!user) return res.status(404).json({ msg: 'User not found' });
+//   res.json({
+//     name: user.name,
+//     id: user._id,
+//     department: user.department,
+//   });
+// });
+
 module.exports = router;

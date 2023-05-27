@@ -33,13 +33,13 @@ const App = () => {
                 <Alerts />
                 <Routes>
                   <Route path='/' element={<Shared />} />
-                  <Route path='department' element={<Department />} />
-                  <Route path='user' element={<User />} />
-                  <Route path='document/:id' element={<DocumentDetails />} />
-                  <Route path='new' element={<NewDocument />} />
-                  <Route path='document/:id/edit' element={<EditDocument />} />
-                  <Route path='register' element={<Register />} />
-                  <Route path='login' element={<Login />} />
+                  <Route path='/department' element={<Department />} />
+                  <Route path='/user' element={<User />} />
+                  <Route path='/new' element={<NewDocument />} />
+                  <Route path='/document/:id' element={<DocumentDetails />} />
+                  <Route path='/document/:id/edit' element={<EditDocument />} />
+                  <Route path='/register' element={<Register />} />
+                  <Route path='/login' element={<Login />} />
                 </Routes>
               </div>
             </Fragment>

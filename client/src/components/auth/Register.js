@@ -98,6 +98,7 @@ const Register = () => {
             value={department}
             onChange={onChange}
           >
+            <option value=''>Please select a department</option>
             <option value='DepartmentA'>DepartmentA</option>
             <option value='DepartmentB'>DepartmentB</option>
             <option value='DepartmentC'>DepartmentC</option>
