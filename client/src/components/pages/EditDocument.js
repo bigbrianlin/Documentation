@@ -9,6 +9,8 @@ const EditDocument = ({ match }) => {
     content: '',
     type: 'private',
   });
+  const [originalTitle, setOriginalTitle] = useState('');
+  const [originalContent, setOriginalContent] = useState('');
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -21,6 +23,8 @@ const EditDocument = ({ match }) => {
     try {
       const res = await axios.get(`/api/documents/${id}`);
       setDocument(res.data);
+      setOriginalTitle(res.data.title);
+      setOriginalContent(res.data.content);
       console.log(res.data);
     } catch (err) {
       console.error(err.response.data);
@@ -46,6 +50,15 @@ const EditDocument = ({ match }) => {
     e.preventDefault();
     try {
       await axios.put(`/api/documents/${id}`, document);
+
+      // Add history record
+      await axios.post('/api/histories', {
+        documentId: id,
+        title: originalTitle,
+        content: originalContent,
+        operation: 'Edit',
+      });
+
       navigate(`/document/${id}`);
     } catch (err) {
       console.error(err.response.data);

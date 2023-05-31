@@ -10,6 +10,7 @@ const DocumentDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [document, setDocument] = useState(null);
+  const [histories, setHistories] = useState([]);
 
   useEffect(() => {
     const fetchDocument = async () => {
@@ -21,7 +22,17 @@ const DocumentDetail = () => {
       }
     };
 
+    const fetchHistories = async () => {
+      try {
+        const response = await axios.get(`/api/histories/${id}`);
+        setHistories(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchDocument();
+    fetchHistories();
   }, [id]);
 
   // Get user
@@ -30,7 +41,6 @@ const DocumentDetail = () => {
   const userID = user && user._id;
   const userDepartment = user && user.department;
   const isAuthenticated = state.isAuthenticated;
-  // const date = new Date(document.date).toLocaleDateString();
 
   if (!document) {
     return <Spinner />;
@@ -44,6 +54,14 @@ const DocumentDetail = () => {
     axios
       .delete(`/api/documents/${id}`)
       .then(() => {
+        // Add history record
+        axios.post('/api/histories', {
+          documentId: id,
+          title: document.title,
+          content: document.content,
+          operation: 'Delete',
+        });
+
         navigate('/', { replace: true });
       })
       .catch(error => {
@@ -82,10 +100,10 @@ const DocumentDetail = () => {
                 }}
               >
                 {/* <Image
-          src={post.author.photoURL}
-          size='tiny'
-          style={{ marginRight: '1rem' }}
-        /> */}
+                 src={post.author.photoURL}
+                 size='tiny'
+                 style={{ marginRight: '1rem' }}
+                 /> */}
                 <div>
                   <h5>版本修改人員 / 時間 :</h5>
                   {document.userName || '匿名 / '}
@@ -100,15 +118,12 @@ const DocumentDetail = () => {
                 </div>
               </div>
               {/* <Segment basic vertical>
-        觀看次數: {post.viewCount || 0}
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 更改次數:{' '}
-        {post.updateCount || 0}
-      </Segment> */}
+               觀看次數: {post.viewCount || 0}
+               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 更改次數:{' '}
+               {post.updateCount || 0}
+                </Segment> */}
 
-              <Header as='h1'>
-                {/* <h1>Title</h1> */}
-                {document.title}
-              </Header>
+              <Header as='h1'>{document.title}</Header>
               {/* <Image src={post.imageUrl} size='large' /> */}
               <Segment basic vertical>
                 {document.content}
@@ -130,11 +145,32 @@ const DocumentDetail = () => {
                   </Button>
                 ) : null}
               </div>
+              <div>
+                <h3>歷史紀錄</h3>
+                {histories.map(history => (
+                  <div key={history._id}>
+                    <h2>{history.userName}</h2>
+                    <p>操作：{history.operation}</p>
+                    <p>
+                      時間：
+                      {new Date(history.date).toLocaleString([], {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </p>
+                    {/* Render other history details */}
+                  </div>
+                ))}
+              </div>
             </>
           </Grid.Column>
         </Grid.Row>
       </Grid>
     </Container>
+
     // <div>
     //   <h2>{document.title}</h2>
     //   <p>{document.content}</p>

@@ -8,6 +8,7 @@ import NewDocument from './components/pages/NewDocument';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import UserProfile from './components/pages/UserProfile';
+import Home from './components/pages/Home';
 import Alerts from './components/layout/Alerts';
 
 import AuthState from './context/auth/AuthState';
@@ -40,6 +41,7 @@ const App = () => {
                   <Route path='/document/:id' element={<DocumentDetails />} />
                   <Route path='/document/:id/edit' element={<EditDocument />} />
                   <Route path='/userProfile' element={<UserProfile />} />
+                  <Route path='/home' element={<Home />} />
                   <Route path='/register' element={<Register />} />
                   <Route path='/login' element={<Login />} />
                 </Routes>

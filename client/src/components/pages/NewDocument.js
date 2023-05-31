@@ -1,4 +1,4 @@
-import { Container, Header, Form, Button } from 'semantic-ui-react';
+import { Container, Header, Form } from 'semantic-ui-react';
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +25,13 @@ const NewDocument = () => {
     try {
       const res = await axios.post('/api/documents', document);
       const id = res.data._id;
-      console.log(res.data);
+      // Add history record
+      await axios.post('/api/histories', {
+        documentId: id,
+        title: document.title,
+        content: document.content,
+        operation: 'Add',
+      });
 
       setDocument({
         title: '',

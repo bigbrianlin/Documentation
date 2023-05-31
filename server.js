@@ -20,7 +20,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/documents', require('./routes/documents'));
 app.use('/api/shared', require('./routes/shared'));
 app.use('/api/department', require('./routes/department'));
-app.use('/api/history', require('./routes/history'));
+app.use('/api/histories', require('./routes/histories'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'default') {
