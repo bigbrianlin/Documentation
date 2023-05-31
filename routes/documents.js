@@ -34,6 +34,7 @@ router.get('/:id', async (req, res) => {
     department: document.department,
     userName: document.userName,
     user: document.user,
+    date: document.date,
   });
 });
 

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { Header, Segment, Button, Container, Grid } from 'semantic-ui-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/auth/AuthState';
+import Spinner from '../layout/Spinner';
+import Topics from '../layout/Topic';
 
-const DocumentDetail = props => {
+const DocumentDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [document, setDocument] = useState(null);
@@ -21,29 +24,16 @@ const DocumentDetail = props => {
     fetchDocument();
   }, [id]);
 
-  // Get userID
-  const [userProfile, setUserProfile] = useState(null);
+  // Get user
   const [state] = useAuth();
-  const userID = state.user && state.user._id;
+  const { user } = state;
+  const userID = user && user._id;
+  const userDepartment = user && user.department;
   const isAuthenticated = state.isAuthenticated;
+  // const date = new Date(document.date).toLocaleDateString();
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        if (userID) {
-          const response = await axios.get(`/api/users/${userID}`);
-          setUserProfile(response.data);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUserProfile();
-  }, [userID]);
-
-  if (!document || !userProfile) {
-    return <div>Loading...</div>;
+  if (!document) {
+    return <Spinner />;
   }
 
   const handleEdit = () => {
@@ -62,38 +52,104 @@ const DocumentDetail = props => {
   };
 
   const isOwner = () => {
-    if (userProfile.user && document.user === userProfile.user._id) {
+    if (user && document.user === userID) {
       return true;
     }
     return false;
   };
 
   const isDepartment = () => {
-    if (
-      userProfile.user &&
-      document.department === userProfile.user.department
-    ) {
+    if (user && document.department === userDepartment) {
       return true;
     }
     return false;
   };
 
   return (
-    <div>
-      <h2>{document.title}</h2>
-      <p>{document.content}</p>
-      <p>{document.department}</p>
-      <p> {document.userName} </p>
+    <Container>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={3}>
+            <Topics />
+          </Grid.Column>
+          <Grid.Column width={13}>
+            <>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '1rem',
+                }}
+              >
+                {/* <Image
+          src={post.author.photoURL}
+          size='tiny'
+          style={{ marginRight: '1rem' }}
+        /> */}
+                <div>
+                  <h5>版本修改人員 / 時間 :</h5>
+                  {document.userName || '匿名 / '}
+                  {'  /  '}
+                  {new Date(document.date).toLocaleString([], {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </div>
+              </div>
+              {/* <Segment basic vertical>
+        觀看次數: {post.viewCount || 0}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 更改次數:{' '}
+        {post.updateCount || 0}
+      </Segment> */}
 
-      {isAuthenticated && isOwner() ? (
-        <>
-          <button onClick={handleEdit}>Edit</button>
-          <button onClick={handleDelete}>Delete</button>{' '}
-        </>
-      ) : isAuthenticated && isDepartment() ? (
-        <button onClick={handleEdit}>Edit</button>
-      ) : null}
-    </div>
+              <Header as='h1'>
+                {/* <h1>Title</h1> */}
+                {document.title}
+              </Header>
+              {/* <Image src={post.imageUrl} size='large' /> */}
+              <Segment basic vertical>
+                {document.content}
+              </Segment>
+
+              <div>
+                {isAuthenticated && isOwner() ? (
+                  <>
+                    <Button basic onClick={handleEdit}>
+                      更改文章
+                    </Button>
+                    <Button color='red' onClick={handleDelete}>
+                      刪除文章
+                    </Button>
+                  </>
+                ) : isAuthenticated && isDepartment() ? (
+                  <Button basic onClick={handleEdit}>
+                    更改文章
+                  </Button>
+                ) : null}
+              </div>
+            </>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Container>
+    // <div>
+    //   <h2>{document.title}</h2>
+    //   <p>{document.content}</p>
+    //   <p>{document.department}</p>
+    //   <p> {document.userName} </p>
+
+    //   {isAuthenticated && isOwner() ? (
+    //     <>
+    //       <button onClick={handleEdit}>Edit</button>
+    //       <button onClick={handleDelete}>Delete</button>{' '}
+    //     </>
+    //   ) : isAuthenticated && isDepartment() ? (
+    //     <button onClick={handleEdit}>Edit</button>
+    //   ) : null}
+    // </div>
   );
 };
 

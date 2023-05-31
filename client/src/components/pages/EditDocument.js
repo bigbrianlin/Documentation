@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Container, Form, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -29,7 +30,16 @@ const EditDocument = ({ match }) => {
   const { title, content, type } = document;
 
   const onChange = e => {
-    setDocument({ ...document, [e.target.name]: e.target.value });
+    console.log(e.target.value);
+    if (e.target.name === 'type') {
+      setDocument({ ...document, type: e.target.value });
+    } else {
+      setDocument({ ...document, [e.target.name]: e.target.value });
+    }
+  };
+
+  const typeOnChange = (e, { value }) => {
+    setDocument({ ...document, type: value });
   };
 
   const onSubmit = async e => {
@@ -43,43 +53,81 @@ const EditDocument = ({ match }) => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <h2>Edit Document</h2>
-      <input
-        type='text'
-        placeholder='Title'
-        name='title'
-        value={title}
-        onChange={onChange}
-      />
-      <input
-        type='text'
-        placeholder='Content'
-        name='content'
-        value={content}
-        onChange={onChange}
-      />
-      <h5>Document Type</h5>
-      <input
-        type='radio'
-        name='type'
-        value='private'
-        checked={type === 'private'}
-        onChange={onChange}
-      />{' '}
-      Private{' '}
-      <input
-        type='radio'
-        name='type'
-        value='shared'
-        checked={type === 'shared'}
-        onChange={onChange}
-      />{' '}
-      Shared
-      <div>
-        <input type='submit' value='Update Document' />
-      </div>
-    </form>
+    <Container>
+      <Header as='h1'>更改文章</Header>
+      <Form onSubmit={onSubmit}>
+        <Form.Input
+          type='text'
+          value={title}
+          name='title'
+          onChange={onChange}
+        />
+        <Form.TextArea
+          // placeholder={post.content}
+          name='content'
+          value={content}
+          onChange={onChange}
+          rows={30}
+        />
+        <Form.Group inline>
+          <label>Document Type</label>
+          <Form.Radio
+            label='private'
+            value='private'
+            name='type'
+            checked={type === 'private'}
+            onChange={typeOnChange}
+          />
+          <Form.Radio
+            label='shared'
+            value='shared'
+            name='type'
+            checked={type === 'shared'}
+            onChange={typeOnChange}
+          />
+        </Form.Group>
+        <Form.Button type='submit' value='Update Document'>
+          送出更改
+        </Form.Button>
+      </Form>
+    </Container>
+    // <form onSubmit={onSubmit}>
+    //   <h2>Edit Document</h2>
+    //   <input
+    //     type='text'
+    //     placeholder='Title'
+    //     name='title'
+    //     value={title}
+    //     onChange={onChange}
+    //   />
+    //   <input
+    //     type='text'
+    //     placeholder='Content'
+    //     name='content'
+    //     value={content}
+    //     onChange={onChange}
+    //   />
+    //   <h5>Document Type</h5>
+    //   <input
+    //     type='radio'
+    //     name='type'
+    //     value='private'
+    //     checked={type === 'private'}
+    //     onChange={onChange}
+    //   />{' '}
+    //   Private{' '}
+    //   <input
+    //     type='radio'
+    //     name='type'
+    //     value='shared'
+    //     checked={type === 'shared'}
+    //     onChange={onChange}
+    //   />{' '}
+    //   Shared
+    //   <div>
+    //     <input type='submit' value='Update Document' />
+    //   </div>
+    // </form>
   );
 };
 
