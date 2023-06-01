@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Header, Segment, Button, Container, Grid } from 'semantic-ui-react';
-import { useParams, useNavigate } from 'react-router-dom';
+import {
+  Header,
+  Segment,
+  Button,
+  Container,
+  Grid,
+  Item,
+  ItemGroup,
+  ItemContent,
+  ItemMeta,
+  ItemHeader,
+} from 'semantic-ui-react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/auth/AuthState';
 import Spinner from '../layout/Spinner';
@@ -88,7 +99,33 @@ const DocumentDetail = () => {
       <Grid>
         <Grid.Row>
           <Grid.Column width={3}>
-            <Topics />
+            {isAuthenticated ? <Topics /> : null}
+            <ItemGroup>
+              <Header as='h3'>歷史紀錄</Header>
+              {histories.map(history => {
+                return (
+                  <Item
+                    key={history._id}
+                    as={Link}
+                    to={`/history/${history._id}`}
+                  >
+                    <ItemContent>
+                      <ItemHeader>{history.userName}</ItemHeader>
+                      <ItemMeta>Operation: {history.operation}</ItemMeta>
+                      <ItemMeta>
+                        {new Date(history.date).toLocaleString([], {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </ItemMeta>
+                    </ItemContent>
+                  </Item>
+                );
+              })}
+            </ItemGroup>
           </Grid.Column>
           <Grid.Column width={13}>
             <>
@@ -99,13 +136,8 @@ const DocumentDetail = () => {
                   marginBottom: '1rem',
                 }}
               >
-                {/* <Image
-                 src={post.author.photoURL}
-                 size='tiny'
-                 style={{ marginRight: '1rem' }}
-                 /> */}
                 <div>
-                  <h5>版本修改人員 / 時間 :</h5>
+                  <h5>使用者 / 時間 :</h5>
                   {document.userName || '匿名 / '}
                   {'  /  '}
                   {new Date(document.date).toLocaleString([], {
@@ -117,18 +149,10 @@ const DocumentDetail = () => {
                   })}
                 </div>
               </div>
-              {/* <Segment basic vertical>
-               觀看次數: {post.viewCount || 0}
-               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 更改次數:{' '}
-               {post.updateCount || 0}
-                </Segment> */}
-
               <Header as='h1'>{document.title}</Header>
-              {/* <Image src={post.imageUrl} size='large' /> */}
               <Segment basic vertical>
                 {document.content}
               </Segment>
-
               <div>
                 {isAuthenticated && isOwner() ? (
                   <>
@@ -145,47 +169,11 @@ const DocumentDetail = () => {
                   </Button>
                 ) : null}
               </div>
-              <div>
-                <h3>歷史紀錄</h3>
-                {histories.map(history => (
-                  <div key={history._id}>
-                    <h2>{history.userName}</h2>
-                    <p>操作：{history.operation}</p>
-                    <p>
-                      時間：
-                      {new Date(history.date).toLocaleString([], {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
-                    {/* Render other history details */}
-                  </div>
-                ))}
-              </div>
             </>
           </Grid.Column>
         </Grid.Row>
       </Grid>
     </Container>
-
-    // <div>
-    //   <h2>{document.title}</h2>
-    //   <p>{document.content}</p>
-    //   <p>{document.department}</p>
-    //   <p> {document.userName} </p>
-
-    //   {isAuthenticated && isOwner() ? (
-    //     <>
-    //       <button onClick={handleEdit}>Edit</button>
-    //       <button onClick={handleDelete}>Delete</button>{' '}
-    //     </>
-    //   ) : isAuthenticated && isDepartment() ? (
-    //     <button onClick={handleEdit}>Edit</button>
-    //   ) : null}
-    // </div>
   );
 };
 

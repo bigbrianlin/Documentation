@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Item, Image, Icon } from 'semantic-ui-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Container, Grid, Item, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
 import Topics from '../layout/Topic';
 import axios from 'axios';
 
 const Department = () => {
-  const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
-
-  const onClick = documentId => {
-    navigate(`/document/${documentId}`);
-  };
 
   useEffect(() => {
     axios
@@ -30,10 +25,10 @@ const Department = () => {
     <Container>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={3}>
+          <Grid.Column width={5}>
             <Topics />
           </Grid.Column>
-          <Grid.Column width={9}>
+          <Grid.Column width={8}>
             <Item.Group>
               {documents.map(document => {
                 return (
@@ -63,7 +58,6 @@ const Department = () => {
                       </Item.Meta>
 
                       <Item.Header>{document.title}</Item.Header>
-                      <Item.Description>{document.content}</Item.Description>
                       <Item.Extra>
                         {/* <a href={`/posts/${post.id}/edit`}> */}
                         {/* 修改次數 : {post.updateCount || 0} */}

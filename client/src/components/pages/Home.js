@@ -28,7 +28,7 @@ function Home() {
   };
 
   const localizer = momentLocalizer(moment);
-
+  // eslint-disable-next-line
   const [events, setEvents] = useState([
     {
       title: 'Event 1',

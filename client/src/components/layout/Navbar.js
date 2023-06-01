@@ -1,6 +1,5 @@
 import { Menu, Search, Dropdown } from 'semantic-ui-react';
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth, logout } from '../../context/auth/AuthState';
 
@@ -12,59 +11,12 @@ const Navbar = ({ title, icon }) => {
     logout(authDispatch);
   };
 
-  // const authLinks = (
-  //   <Fragment>
-  //     <li>
-  //       <Link to='/'>Shared</Link>
-  //     </li>
-  //     <li>
-  //       <Link to='/department'>Department</Link>
-  //     </li>
-  //     <li>
-  //       <Link to='/user'>User</Link>
-  //     </li>
-  //     <li>
-  //       <Link to='/new'>New</Link>
-  //     </li>
-  //     <li>
-  //       <Link to='/userProfile'>UserProfile</Link>
-  //     </li>
-  //     <li>
-  //       <Link onClick={onLogout} to='/login'>
-  //         <i className='fas fa-sign-out-alt' />{' '}
-  //         <span className='hide-sm'>Logout</span>
-  //       </Link>
-  //     </li>
-  //     <li>Hello {user && user.name}</li>
-  //   </Fragment>
-  // );
-
-  // const guestLinks = (
-  //   <Fragment>
-  //     <li>
-  //       <Link to='/'>Shared</Link>
-  //     </li>
-  //     <li>
-  //       <Link to='/register'>Register</Link>
-  //     </li>
-  //     <li>
-  //       <Link to='/login'>Login</Link>
-  //     </li>
-  //   </Fragment>
-  // );
-
   return (
     <Menu style={{ backgroundColor: 'black', color: 'white' }}>
       <Menu.Menu position='left'>
-        {isAuthenticated ? ( // 如果有登入的話
-          <Menu.Item as={Link} to='/' style={{ color: 'white' }}>
-            Shared Document
-          </Menu.Item>
-        ) : (
-          <Menu.Item as={Link} to='/' style={{ color: 'white' }}>
-            Shared Document
-          </Menu.Item>
-        )}
+        <Menu.Item as={Link} to='/' style={{ color: 'white' }}>
+          共享文件
+        </Menu.Item>
       </Menu.Menu>
 
       <Menu.Item>
@@ -90,12 +42,12 @@ const Navbar = ({ title, icon }) => {
             <Menu.Item as={Link} to='/new' style={{ color: 'white' }}>
               發表文章
             </Menu.Item>{' '}
-            {/* <Menu.Item as={Link} to='/department' style={{ color: 'white' }}>
-              Main page
+            <Menu.Item as={Link} to='/deleteHistory' style={{ color: 'white' }}>
+              歷史紀錄
             </Menu.Item>{' '}
-            <Menu.Item as={Link} to='/user' style={{ color: 'white' }}>
-              View
-            </Menu.Item> */}
+            <Menu.Item as={Link} to='/userProfile' style={{ color: 'white' }}>
+              使用者檔案
+            </Menu.Item>{' '}
             <Dropdown item text={user && user.name} style={{ color: 'white' }}>
               <Dropdown.Menu>
                 <Dropdown.Item
@@ -125,26 +77,7 @@ const Navbar = ({ title, icon }) => {
         )}
       </Menu.Menu>
     </Menu>
-
-    // <div className='navbar bg-primary'>
-    //   <h1>
-    //     <Link to='/'>
-    //       <i className={icon} /> {title}
-    //     </Link>
-    //   </h1>
-    //   <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
-    // </div>
   );
 };
-
-// Navbar.protoTypes = {
-//   title: PropTypes.string.isRequired,
-//   icon: PropTypes.string,
-// };
-
-// Navbar.defaultProps = {
-//   title: 'TSMC',
-//   icon: 'fas fa-id-card-alt',
-// };
 
 export default Navbar;

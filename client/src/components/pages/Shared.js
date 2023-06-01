@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Grid, Item, Image, Icon } from 'semantic-ui-react';
+import { Container, Grid, Item, Icon } from 'semantic-ui-react';
 import Topics from '../layout/Topic';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
 import axios from 'axios';
+import { useAuth } from '../../context/auth/AuthState';
 
 const Shared = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [documents, setDocuments] = useState([]);
+  const [state] = useAuth();
+  const isAuthenticated = state.isAuthenticated;
 
-  const onClick = documentId => {
-    navigate(`/document/${documentId}`);
-  };
+  // const onClick = documentId => {
+  //   navigate(`/document/${documentId}`);
+  // };
 
   useEffect(() => {
     axios
@@ -33,10 +36,10 @@ const Shared = () => {
     <Container>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={3}>
-            <Topics />
+          <Grid.Column width={5}>
+            {isAuthenticated ? <Topics /> : null}
           </Grid.Column>
-          <Grid.Column width={9}>
+          <Grid.Column width={8}>
             <Item.Group>
               {documents.map(document => {
                 return (
@@ -45,16 +48,9 @@ const Shared = () => {
                     as={Link}
                     to={`/document/${document._id}`}
                   >
-                    {/* <Image src={post.imageUrl} size='tiny' /> */}
-
                     <Item.Content>
                       <Item.Meta>
                         <Icon name='user circle' size='small' />
-                        {/* {post.author.photoURL ? (
-                          <Image src={post.author.photoURL} width={25} />
-                        ) : (
-                          <Icon name='user circle' size='small' />
-                        )} */}
                         {document.department} • {document.userName || '匿名'} •{' '}
                         {new Date(document.date).toLocaleString([], {
                           year: 'numeric',
@@ -66,14 +62,6 @@ const Shared = () => {
                       </Item.Meta>
 
                       <Item.Header>{document.title}</Item.Header>
-                      <Item.Description>{document.content}</Item.Description>
-                      <Item.Extra>
-                        {/* <a href={`/posts/${post.id}/edit`}> */}
-                        {/* 修改次數 : {post.updateCount || 0} */}
-                        {/* </a>{" "} */} {/* <a href={`/posts/${post.id}`}> */}
-                        {/* 觀看次數 : {post.viewCount || 0} */}
-                        {/* </a> */}
-                      </Item.Extra>
                     </Item.Content>
                   </Item>
                 );

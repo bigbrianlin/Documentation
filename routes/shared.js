@@ -19,4 +19,8 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', (req, res) => {
+  console.log('yes');
+});
+
 module.exports = router;

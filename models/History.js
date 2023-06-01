@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const HistorySchema = mongoose.Schema({
-  documentId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'documents',
-  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',

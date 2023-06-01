@@ -21,6 +21,7 @@ app.use('/api/documents', require('./routes/documents'));
 app.use('/api/shared', require('./routes/shared'));
 app.use('/api/department', require('./routes/department'));
 app.use('/api/histories', require('./routes/histories'));
+app.use('/api/deletedHistories', require('./routes/deletedHistories'));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'default') {

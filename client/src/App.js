@@ -9,6 +9,10 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import UserProfile from './components/pages/UserProfile';
 import Home from './components/pages/Home';
+import DeleteHistory from './components/pages/DeleteHistory';
+import History from './components/pages/History';
+import DocumentDetails from './components/pages/DocumentDetails';
+import EditDocument from './components/pages/EditDocument';
 import Alerts from './components/layout/Alerts';
 
 import AuthState from './context/auth/AuthState';
@@ -16,8 +20,6 @@ import DocumentState from './context/document/DocumentState';
 import AlertState from './context/alert/AlertState';
 import setAuthToken from './utils/setAuthToken';
 import './App.css';
-import DocumentDetails from './components/pages/DocumentDetails';
-import EditDocument from './components/pages/EditDocument';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -42,6 +44,8 @@ const App = () => {
                   <Route path='/document/:id/edit' element={<EditDocument />} />
                   <Route path='/userProfile' element={<UserProfile />} />
                   <Route path='/home' element={<Home />} />
+                  <Route path='/deleteHistory' element={<DeleteHistory />} />
+                  <Route path='/history/:id' element={<History />} />
                   <Route path='/register' element={<Register />} />
                   <Route path='/login' element={<Login />} />
                 </Routes>
