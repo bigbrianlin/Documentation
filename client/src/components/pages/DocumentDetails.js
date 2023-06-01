@@ -98,7 +98,7 @@ const DocumentDetail = () => {
     <Container>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={3}>
+          <Grid.Column width={5}>
             {isAuthenticated ? <Topics /> : null}
             <ItemGroup>
               <Header as='h3'>歷史紀錄</Header>
@@ -127,7 +127,7 @@ const DocumentDetail = () => {
               })}
             </ItemGroup>
           </Grid.Column>
-          <Grid.Column width={13}>
+          <Grid.Column width={8}>
             <>
               <div
                 style={{
