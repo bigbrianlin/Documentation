@@ -21,7 +21,7 @@ Contains the frontend application built using React.
 Houses the backend server implemented with Express.js.  
 ## How to Run 🏃  
 ### Without Docker 💻  
-1. Navigate to the backend directory, run npm install, and then npm run server.  
+1. Navigate to the backend directory, run ```npm install```, and then npm run server.  
 2. Navigate to the client directory, run npm install, and start the app with npm start.  
 3. Open your web browser and go to localhost:3000 to access the application.  
 ### With Docker 🐳  
