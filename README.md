@@ -21,28 +21,29 @@ Contains the frontend application built using React.
 Houses the backend server implemented with Express.js.  
 ## How to Run 🏃  
 ### Without Docker 💻  
-1. Navigate to the backend directory, run ```npm install```, and then npm run server.  
-2. Navigate to the client directory, run npm install, and start the app with npm start.  
-3. Open your web browser and go to localhost:3000 to access the application.  
+1. Navigate to the ```backend``` directory, run ```npm install```, and then ```npm run server```.  
+2. Navigate to the ```client``` directory, run ```npm install```, and start the app with ```npm start```.  
+3. Open your web browser and go to ```localhost:3000``` to access the application.  
 ### With Docker 🐳  
 1. Make sure Docker Desktop is installed on your system.  
-2. Run docker-compose up to start the app.  
-3. For any changes, rebuild the containers using docker-compose up --build.  
+2. Run ```docker-compose``` up to start the app.  
+3. For any changes, rebuild the containers using ```docker-compose up --build```.  
 ## Dependencies 🔧  
 Key libraries and tools used in this project include:  
 
-React  
-ReactDOM  
-React Router  
-Semantic UI React  
-Axios  
-Express  
-Mongoose  
-bcryptjs  
-jsonwebtoken  
-config  
-Nodemon  
-concurrently  
-For a comprehensive list of dependencies, please refer to the package.json files in both the client and backend directories.  
+- React  
+- ReactDOM  
+- React Router  
+- Semantic UI React  
+- Axios  
+- Express  
+- Mongoose  
+- bcryptjs  
+- jsonwebtoken  
+- config  
+- Nodemon  
+- concurrently  
+
+For a comprehensive list of dependencies, please refer to the ```package.json``` files in both the ```client``` and ```backend``` directories.  
 
 Feel free to use and customize this Documentation Manager App to streamline your document management needs. If you have any questions or need further assistance, don't hesitate to reach out to our support team. Happy documenting! 📝✨  
