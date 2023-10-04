@@ -1,8 +1,8 @@
-#Documentation Manager App  
+# Documentation Manager App    
 The Documentation Manager App is a robust and user-friendly tool designed to simplify the management of documents. It leverages the power of React for the frontend and Express.js for the backend, providing a seamless experience for users to create, edit, and view documents effortlessly.  
 
-##Key Features 🔑  
-###User Authentication  
+## Key Features 🔑  
+### User Authentication  
 Easily register, log in, and log out to ensure secure access to your documents.  
 Document Management  
 Streamlined creation, viewing, and editing of documents for a hassle-free experience.  
